@@ -7,7 +7,7 @@ interface Rule {
   action: string;
 }
 
-const STORAGE_KEY = 'loopforge-rules';
+const STORAGE_KEY = 'viralo-rules';
 
 const TRIGGER_EVENTS = [
   { value: 'export_count', label: 'Export Count' },

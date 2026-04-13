@@ -6,7 +6,7 @@ interface PoweredByBadgeProps {
 }
 
 export function PoweredByBadge({
-  brandName = 'LoopForge',
+  brandName = 'Viralo',
   brandUrl,
   primaryColor = '#EF4444',
   compact = false,

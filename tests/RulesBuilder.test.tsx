@@ -81,7 +81,7 @@ describe('RulesBuilder', () => {
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     // Verify localStorage has the data
-    const stored = window.localStorage.getItem('loopforge-rules');
+    const stored = window.localStorage.getItem('viralo-rules');
     expect(stored).not.toBeNull();
 
     // Unmount and remount to simulate page refresh

@@ -8,6 +8,16 @@ export default defineConfig({
       plugins: [],
     },
   },
+  build: {
+    target: 'es2020',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

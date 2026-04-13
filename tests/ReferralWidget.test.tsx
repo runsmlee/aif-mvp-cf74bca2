@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { ReferralWidget } from '../src/components/ReferralWidget';
 
 describe('ReferralWidget', () => {
@@ -17,7 +17,9 @@ describe('ReferralWidget', () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
     render(<ReferralWidget referralCode="ABC123" />);
-    fireEvent.click(screen.getByRole('button', { name: /copy/i }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /copy/i }));
+    });
     expect(writeText).toHaveBeenCalledWith(expect.stringContaining('ABC123'));
   });
 
@@ -45,7 +47,9 @@ describe('ReferralWidget', () => {
     Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
     render(<ReferralWidget referralCode="ABC123" />);
     const copyBtn = screen.getByRole('button', { name: /copy referral link/i });
-    fireEvent.click(copyBtn);
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
     await waitFor(() => {
       expect(copyBtn).toHaveTextContent(/copied/i);
     });

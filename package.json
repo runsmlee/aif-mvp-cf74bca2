@@ -15,7 +15,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
@@ -34,5 +33,6 @@
     "typescript": "^6.0.2",
     "vite": "^8.0.8",
     "vitest": "^4.1.4"
-  }
+  },
+  "description": ""
 }

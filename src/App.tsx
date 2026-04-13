@@ -2,13 +2,15 @@ import { useState, useCallback } from 'react';
 import { Playground } from './components/Playground';
 import { Dashboard } from './components/Dashboard';
 import { RulesBuilder } from './components/RulesBuilder';
+import { QuickstartGuide } from './components/QuickstartGuide';
 
-type Tab = 'playground' | 'dashboard' | 'rules';
+type Tab = 'playground' | 'dashboard' | 'rules' | 'quickstart';
 
 const NAV_ITEMS: { key: Tab; label: string; icon: string }[] = [
   { key: 'playground', label: 'Playground', icon: '⚡' },
   { key: 'dashboard', label: 'Dashboard', icon: '📊' },
   { key: 'rules', label: 'Rules Builder', icon: '⚙️' },
+  { key: 'quickstart', label: 'Quickstart', icon: '📖' },
 ];
 
 export default function App() {
@@ -25,10 +27,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-text-primary font-bold text-xl tracking-tight">
-              <span className="text-primary">Loop</span>Forge
+              <span className="text-primary">Vira</span>lo
             </h1>
             <span className="text-text-muted text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-border bg-surface/50">
-              SDK Playground
+              Growth as Code
             </span>
           </div>
           <nav className="flex gap-1 p-1 rounded-lg bg-surface/50 border border-border-subtle" role="tablist" aria-label="Main navigation">
@@ -59,13 +61,14 @@ export default function App() {
           {activeTab === 'playground' && <Playground />}
           {activeTab === 'dashboard' && <Dashboard />}
           {activeTab === 'rules' && <RulesBuilder />}
+          {activeTab === 'quickstart' && <QuickstartGuide />}
         </div>
       </main>
 
       {/* Footer */}
       <footer className="border-t border-border-subtle px-4 py-4 text-center">
         <p className="text-text-muted text-xs">
-          LoopForge SDK Playground — Build viral growth loops into your product architecture
+          Viralo — Growth as Code
         </p>
       </footer>
     </div>

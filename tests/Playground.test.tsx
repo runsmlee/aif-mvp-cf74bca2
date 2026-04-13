@@ -54,7 +54,7 @@ describe('Playground', () => {
     render(<Playground />);
     fireEvent.click(screen.getByRole('button', { name: /copy code/i }));
     const copiedCode = writeText.mock.calls[0][0] as string;
-    expect(copiedCode).toContain('@loopforge/react');
+    expect(copiedCode).toContain('@viralo/react');
   });
 
   it('generated code includes all configured props in the JSX', async () => {

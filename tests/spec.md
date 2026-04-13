@@ -64,6 +64,14 @@
 - [ ] clicking copy button copies code to clipboard
 - [ ] shows "Copied!" feedback after copy action
 
+### QuickstartGuide.test.tsx
+- [ ] renders without crash
+- [ ] displays framework tabs: Vite, Next.js, CRA
+- [ ] displays 3 integration steps for each framework
+- [ ] switching framework tab updates the guide content
+- [ ] copy button on steps copies code to clipboard
+- [ ] shows quickstart guide testid
+
 ## User Journey Tests
 
 ### Primary Workflow: Configure and Copy a Growth Component

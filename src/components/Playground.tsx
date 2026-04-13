@@ -30,7 +30,7 @@ function generateCode(type: ComponentType, config: Config): string {
   switch (type) {
     case 'referral': {
       const c = config as ReferralConfig;
-      return `import { ReferralWidget } from '@loopforge/react';
+      return `import { ReferralWidget } from '@viralo/react';
 
 export function App() {
   return (
@@ -43,7 +43,7 @@ export function App() {
     }
     case 'invite': {
       const c = config as InviteConfig;
-      return `import { InviteGate } from '@loopforge/react';
+      return `import { InviteGate } from '@viralo/react';
 
 export function App() {
   return (
@@ -60,7 +60,7 @@ export function App() {
     }
     case 'badge': {
       const c = config as BadgeConfig;
-      return `import { PoweredByBadge } from '@loopforge/react';
+      return `import { PoweredByBadge } from '@viralo/react';
 
 export function App() {
   return (
@@ -79,7 +79,7 @@ export function App() {
 const DEFAULT_CONFIGS: Record<ComponentType, Config> = {
   referral: { referralCode: 'ABC123', primaryColor: '#EF4444' } as ReferralConfig,
   invite: { requiredInvites: 3, currentInvites: 0, primaryColor: '#EF4444' } as InviteConfig,
-  badge: { brandName: 'LoopForge', brandUrl: 'https://loopforge.dev', primaryColor: '#EF4444', compact: false } as BadgeConfig,
+  badge: { brandName: 'Viralo', brandUrl: 'https://viralo.dev', primaryColor: '#EF4444', compact: false } as BadgeConfig,
 };
 
 const TABS: { key: ComponentType; label: string }[] = [
