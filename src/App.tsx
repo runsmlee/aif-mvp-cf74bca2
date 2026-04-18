@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { Playground } from './components/Playground';
-import { Dashboard } from './components/Dashboard';
-import { RulesBuilder } from './components/RulesBuilder';
-import { QuickstartGuide } from './components/QuickstartGuide';
+
+const Dashboard = lazy(() => import('./components/Dashboard').then(m => ({ default: m.Dashboard })));
+const RulesBuilder = lazy(() => import('./components/RulesBuilder').then(m => ({ default: m.RulesBuilder })));
+const QuickstartGuide = lazy(() => import('./components/QuickstartGuide').then(m => ({ default: m.QuickstartGuide })));
 
 type Tab = 'playground' | 'dashboard' | 'rules' | 'quickstart';
 
@@ -59,9 +60,17 @@ export default function App() {
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         <div role="tabpanel" aria-label={`${activeTab} panel`} style={{ animation: 'fade-in 200ms ease-out' }}>
           {activeTab === 'playground' && <Playground />}
-          {activeTab === 'dashboard' && <Dashboard />}
-          {activeTab === 'rules' && <RulesBuilder />}
-          {activeTab === 'quickstart' && <QuickstartGuide />}
+          {activeTab !== 'playground' && (
+            <Suspense fallback={
+              <div className="flex items-center justify-center min-h-[320px]">
+                <div className="text-text-muted text-sm animate-pulse">Loading…</div>
+              </div>
+            }>
+              {activeTab === 'dashboard' && <Dashboard />}
+              {activeTab === 'rules' && <RulesBuilder />}
+              {activeTab === 'quickstart' && <QuickstartGuide />}
+            </Suspense>
+          )}
         </div>
       </main>
 

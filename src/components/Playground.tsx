@@ -1,8 +1,9 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, lazy, Suspense } from 'react';
 import { ReferralWidget } from './ReferralWidget';
-import { InviteGate } from './InviteGate';
-import { PoweredByBadge } from './PoweredByBadge';
 import { CodeSnippet } from './CodeSnippet';
+
+const InviteGate = lazy(() => import('./InviteGate').then(m => ({ default: m.InviteGate })));
+const PoweredByBadge = lazy(() => import('./PoweredByBadge').then(m => ({ default: m.PoweredByBadge })));
 
 type ComponentType = 'referral' | 'invite' | 'badge';
 
@@ -119,32 +120,36 @@ export function Playground() {
       case 'invite': {
         const c = currentConfig as InviteConfig;
         return (
-          <InviteGate
-            requiredInvites={c.requiredInvites}
-            currentInvites={c.currentInvites}
-            primaryColor={c.primaryColor}
-            onInviteClick={() => {
-              updateConfig({ currentInvites: c.currentInvites + 1 });
-            }}
-          >
-            <div className="p-4 rounded-md bg-surface text-text-primary">
-              <h4 className="font-semibold">Premium Feature</h4>
-              <p className="text-text-secondary text-sm mt-1">
-                This content is gated behind invites.
-              </p>
-            </div>
-          </InviteGate>
+          <Suspense fallback={<div className="text-text-muted text-sm animate-pulse">Loading…</div>}>
+            <InviteGate
+              requiredInvites={c.requiredInvites}
+              currentInvites={c.currentInvites}
+              primaryColor={c.primaryColor}
+              onInviteClick={() => {
+                updateConfig({ currentInvites: c.currentInvites + 1 });
+              }}
+            >
+              <div className="p-4 rounded-md bg-surface text-text-primary">
+                <h4 className="font-semibold">Premium Feature</h4>
+                <p className="text-text-secondary text-sm mt-1">
+                  This content is gated behind invites.
+                </p>
+              </div>
+            </InviteGate>
+          </Suspense>
         );
       }
       case 'badge': {
         const c = currentConfig as BadgeConfig;
         return (
-          <PoweredByBadge
-            brandName={c.brandName}
-            brandUrl={c.brandUrl}
-            primaryColor={c.primaryColor}
-            compact={c.compact}
-          />
+          <Suspense fallback={<div className="text-text-muted text-sm animate-pulse">Loading…</div>}>
+            <PoweredByBadge
+              brandName={c.brandName}
+              brandUrl={c.brandUrl}
+              primaryColor={c.primaryColor}
+              compact={c.compact}
+            />
+          </Suspense>
         );
       }
     }

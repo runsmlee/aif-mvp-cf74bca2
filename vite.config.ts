@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     conditions: ['import', 'module', 'browser', 'default'],
     dedupe: ['react', 'react-dom'],
+    modules: [path.resolve(__dirname, 'node_modules'), '/app/node_modules', 'node_modules'],
   },
   css: {
     postcss: {
@@ -17,8 +18,10 @@ export default defineConfig({
     target: 'es2020',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
+            return 'vendor';
+          }
         },
       },
     },
