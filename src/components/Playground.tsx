@@ -25,63 +25,53 @@ interface BadgeConfig {
   compact: boolean;
 }
 
-type Config = ReferralConfig | InviteConfig | BadgeConfig;
+const DEFAULT_REFERRAL: ReferralConfig = { referralCode: 'ABC123', primaryColor: '#EF4444' };
+const DEFAULT_INVITE: InviteConfig = { requiredInvites: 3, currentInvites: 0, primaryColor: '#EF4444' };
+const DEFAULT_BADGE: BadgeConfig = { brandName: 'Viralo', brandUrl: 'https://viralo.dev', primaryColor: '#EF4444', compact: false };
 
-function generateCode(type: ComponentType, config: Config): string {
+function generateCode(type: ComponentType, referral: ReferralConfig, invite: InviteConfig, badge: BadgeConfig): string {
   switch (type) {
-    case 'referral': {
-      const c = config as ReferralConfig;
+    case 'referral':
       return `import { ReferralWidget } from '@viralo/react';
 
 export function App() {
   return (
     <ReferralWidget
-      referralCode="${c.referralCode}"
-      primaryColor="${c.primaryColor}"
+      referralCode="${referral.referralCode}"
+      primaryColor="${referral.primaryColor}"
     />
   );
 }`;
-    }
-    case 'invite': {
-      const c = config as InviteConfig;
+    case 'invite':
       return `import { InviteGate } from '@viralo/react';
 
 export function App() {
   return (
     <InviteGate
-      requiredInvites={${c.requiredInvites}}
-      currentInvites={${c.currentInvites}}
-      primaryColor="${c.primaryColor}"
+      requiredInvites={${invite.requiredInvites}}
+      currentInvites={${invite.currentInvites}}
+      primaryColor="${invite.primaryColor}"
       onInviteClick={() => console.log('invite clicked')}
     >
       <div>Protected content here</div>
     </InviteGate>
   );
 }`;
-    }
-    case 'badge': {
-      const c = config as BadgeConfig;
+    case 'badge':
       return `import { PoweredByBadge } from '@viralo/react';
 
 export function App() {
   return (
     <PoweredByBadge
-      brandName="${c.brandName}"
-      brandUrl="${c.brandUrl}"
-      primaryColor="${c.primaryColor}"
-      compact={${c.compact}}
+      brandName="${badge.brandName}"
+      brandUrl="${badge.brandUrl}"
+      primaryColor="${badge.primaryColor}"
+      compact={${badge.compact}}
     />
   );
 }`;
-    }
   }
 }
-
-const DEFAULT_CONFIGS: Record<ComponentType, Config> = {
-  referral: { referralCode: 'ABC123', primaryColor: '#EF4444' } as ReferralConfig,
-  invite: { requiredInvites: 3, currentInvites: 0, primaryColor: '#EF4444' } as InviteConfig,
-  badge: { brandName: 'Viralo', brandUrl: 'https://viralo.dev', primaryColor: '#EF4444', compact: false } as BadgeConfig,
-};
 
 const TABS: { key: ComponentType; label: string }[] = [
   { key: 'referral', label: 'ReferralWidget' },
@@ -91,42 +81,55 @@ const TABS: { key: ComponentType; label: string }[] = [
 
 export function Playground() {
   const [activeType, setActiveType] = useState<ComponentType>('referral');
-  const [configs, setConfigs] = useState<Record<ComponentType, Config>>({
-    referral: { ...DEFAULT_CONFIGS.referral } as ReferralConfig,
-    invite: { ...DEFAULT_CONFIGS.invite } as InviteConfig,
-    badge: { ...DEFAULT_CONFIGS.badge } as BadgeConfig,
-  });
+  const [referralConfig, setReferralConfig] = useState<ReferralConfig>({ ...DEFAULT_REFERRAL });
+  const [inviteConfig, setInviteConfig] = useState<InviteConfig>({ ...DEFAULT_INVITE });
+  const [badgeConfig, setBadgeConfig] = useState<BadgeConfig>({ ...DEFAULT_BADGE });
+  const [codeCopied, setCodeCopied] = useState(false);
 
-  const currentConfig = configs[activeType];
-  const code = useMemo(() => generateCode(activeType, currentConfig), [activeType, currentConfig]);
-
-  const updateConfig = useCallback((updates: Partial<Config>) => {
-    setConfigs((prev) => ({
-      ...prev,
-      [activeType]: { ...prev[activeType], ...updates },
-    }));
-  }, [activeType]);
+  const code = useMemo(
+    () => generateCode(activeType, referralConfig, inviteConfig, badgeConfig),
+    [activeType, referralConfig, inviteConfig, badgeConfig],
+  );
 
   const handleTabChange = useCallback((type: ComponentType) => {
     setActiveType(type);
   }, []);
 
+  const handleCopyCode = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCodeCopied(true);
+      setTimeout(() => setCodeCopied(false), 2000);
+    } catch {
+      // Fallback: do nothing
+    }
+  }, [code]);
+
+  const updateReferral = useCallback((updates: Partial<ReferralConfig>) => {
+    setReferralConfig(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  const updateInvite = useCallback((updates: Partial<InviteConfig>) => {
+    setInviteConfig(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  const updateBadge = useCallback((updates: Partial<BadgeConfig>) => {
+    setBadgeConfig(prev => ({ ...prev, ...updates }));
+  }, []);
+
   const renderPreview = () => {
     switch (activeType) {
-      case 'referral': {
-        const c = currentConfig as ReferralConfig;
-        return <ReferralWidget referralCode={c.referralCode} primaryColor={c.primaryColor} />;
-      }
-      case 'invite': {
-        const c = currentConfig as InviteConfig;
+      case 'referral':
+        return <ReferralWidget referralCode={referralConfig.referralCode} primaryColor={referralConfig.primaryColor} />;
+      case 'invite':
         return (
           <Suspense fallback={<div className="text-text-muted text-sm animate-pulse">Loading…</div>}>
             <InviteGate
-              requiredInvites={c.requiredInvites}
-              currentInvites={c.currentInvites}
-              primaryColor={c.primaryColor}
+              requiredInvites={inviteConfig.requiredInvites}
+              currentInvites={inviteConfig.currentInvites}
+              primaryColor={inviteConfig.primaryColor}
               onInviteClick={() => {
-                updateConfig({ currentInvites: c.currentInvites + 1 });
+                updateInvite({ currentInvites: inviteConfig.currentInvites + 1 });
               }}
             >
               <div className="p-4 rounded-md bg-surface text-text-primary">
@@ -138,27 +141,23 @@ export function Playground() {
             </InviteGate>
           </Suspense>
         );
-      }
-      case 'badge': {
-        const c = currentConfig as BadgeConfig;
+      case 'badge':
         return (
           <Suspense fallback={<div className="text-text-muted text-sm animate-pulse">Loading…</div>}>
             <PoweredByBadge
-              brandName={c.brandName}
-              brandUrl={c.brandUrl}
-              primaryColor={c.primaryColor}
-              compact={c.compact}
+              brandName={badgeConfig.brandName}
+              brandUrl={badgeConfig.brandUrl}
+              primaryColor={badgeConfig.primaryColor}
+              compact={badgeConfig.compact}
             />
           </Suspense>
         );
-      }
     }
   };
 
   const renderSidebar = () => {
     switch (activeType) {
-      case 'referral': {
-        const c = currentConfig as ReferralConfig;
+      case 'referral':
         return (
           <div className="space-y-5">
             <div>
@@ -168,8 +167,8 @@ export function Playground() {
               <input
                 id="referral-code"
                 type="text"
-                value={c.referralCode}
-                onChange={(e) => updateConfig({ referralCode: e.target.value })}
+                value={referralConfig.referralCode}
+                onChange={(e) => updateReferral({ referralCode: e.target.value })}
                 className="w-full h-10 rounded-lg bg-surface px-3 text-text-primary text-sm border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
                 aria-label="Referral code"
               />
@@ -182,24 +181,22 @@ export function Playground() {
                 <input
                   id="primary-color"
                   type="color"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={referralConfig.primaryColor}
+                  onChange={(e) => updateReferral({ primaryColor: e.target.value })}
                   className="w-10 h-10 rounded-lg cursor-pointer border border-border bg-transparent p-0.5"
                   aria-label="Primary color"
                 />
                 <input
                   type="text"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={referralConfig.primaryColor}
+                  onChange={(e) => updateReferral({ primaryColor: e.target.value })}
                   className="flex-1 h-10 rounded-lg bg-surface px-3 text-text-primary text-sm font-mono border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
                 />
               </div>
             </div>
           </div>
         );
-      }
-      case 'invite': {
-        const c = currentConfig as InviteConfig;
+      case 'invite':
         return (
           <div className="space-y-5">
             <div>
@@ -210,8 +207,8 @@ export function Playground() {
                 id="required-invites"
                 type="number"
                 min={1}
-                value={c.requiredInvites}
-                onChange={(e) => updateConfig({ requiredInvites: Math.max(1, Number(e.target.value)) })}
+                value={inviteConfig.requiredInvites}
+                onChange={(e) => updateInvite({ requiredInvites: Math.max(1, Number(e.target.value)) })}
                 className="w-full h-10 rounded-lg bg-surface px-3 text-text-primary text-sm border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
@@ -223,8 +220,8 @@ export function Playground() {
                 id="current-invites"
                 type="number"
                 min={0}
-                value={c.currentInvites}
-                onChange={(e) => updateConfig({ currentInvites: Math.max(0, Number(e.target.value)) })}
+                value={inviteConfig.currentInvites}
+                onChange={(e) => updateInvite({ currentInvites: Math.max(0, Number(e.target.value)) })}
                 className="w-full h-10 rounded-lg bg-surface px-3 text-text-primary text-sm border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
@@ -236,24 +233,22 @@ export function Playground() {
                 <input
                   id="invite-primary-color"
                   type="color"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={inviteConfig.primaryColor}
+                  onChange={(e) => updateInvite({ primaryColor: e.target.value })}
                   className="w-10 h-10 rounded-lg cursor-pointer border border-border bg-transparent p-0.5"
                   aria-label="Primary color"
                 />
                 <input
                   type="text"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={inviteConfig.primaryColor}
+                  onChange={(e) => updateInvite({ primaryColor: e.target.value })}
                   className="flex-1 h-10 rounded-lg bg-surface px-3 text-text-primary text-sm font-mono border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
                 />
               </div>
             </div>
           </div>
         );
-      }
-      case 'badge': {
-        const c = currentConfig as BadgeConfig;
+      case 'badge':
         return (
           <div className="space-y-5">
             <div>
@@ -263,8 +258,8 @@ export function Playground() {
               <input
                 id="brand-name"
                 type="text"
-                value={c.brandName}
-                onChange={(e) => updateConfig({ brandName: e.target.value })}
+                value={badgeConfig.brandName}
+                onChange={(e) => updateBadge({ brandName: e.target.value })}
                 className="w-full h-10 rounded-lg bg-surface px-3 text-text-primary text-sm border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
@@ -275,8 +270,8 @@ export function Playground() {
               <input
                 id="brand-url"
                 type="text"
-                value={c.brandUrl}
-                onChange={(e) => updateConfig({ brandUrl: e.target.value })}
+                value={badgeConfig.brandUrl}
+                onChange={(e) => updateBadge({ brandUrl: e.target.value })}
                 className="w-full h-10 rounded-lg bg-surface px-3 text-text-primary text-sm border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
@@ -288,15 +283,15 @@ export function Playground() {
                 <input
                   id="badge-primary-color"
                   type="color"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={badgeConfig.primaryColor}
+                  onChange={(e) => updateBadge({ primaryColor: e.target.value })}
                   className="w-10 h-10 rounded-lg cursor-pointer border border-border bg-transparent p-0.5"
                   aria-label="Primary color"
                 />
                 <input
                   type="text"
-                  value={c.primaryColor}
-                  onChange={(e) => updateConfig({ primaryColor: e.target.value })}
+                  value={badgeConfig.primaryColor}
+                  onChange={(e) => updateBadge({ primaryColor: e.target.value })}
                   className="flex-1 h-10 rounded-lg bg-surface px-3 text-text-primary text-sm font-mono border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:border-primary"
                 />
               </div>
@@ -305,8 +300,8 @@ export function Playground() {
               <input
                 id="compact-mode"
                 type="checkbox"
-                checked={c.compact}
-                onChange={(e) => updateConfig({ compact: e.target.checked })}
+                checked={badgeConfig.compact}
+                onChange={(e) => updateBadge({ compact: e.target.checked })}
               />
               <label htmlFor="compact-mode" className="text-text-secondary text-sm cursor-pointer select-none">
                 Compact mode
@@ -314,7 +309,6 @@ export function Playground() {
             </div>
           </div>
         );
-      }
     }
   };
 
@@ -370,18 +364,17 @@ export function Playground() {
             <div className="flex-1">
               <CodeSnippet code={code} />
               <button
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(code);
-                  } catch {
-                    // fallback
-                  }
-                }}
+                onClick={handleCopyCode}
                 className="mt-3 w-full px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface shadow-sm hover:shadow-glow-primary min-h-[44px]"
                 aria-label="Copy code"
               >
-                Copy Code
+                {codeCopied ? '✓ Copied!' : 'Copy Code'}
               </button>
+              {codeCopied && (
+                <p className="text-success text-xs font-medium mt-2 text-center" role="status" style={{ animation: 'fade-in 200ms ease-out' }}>
+                  Code copied to clipboard!
+                </p>
+              )}
             </div>
           </div>
         </div>

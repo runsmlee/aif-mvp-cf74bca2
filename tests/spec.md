@@ -8,7 +8,7 @@
 - [ ] switching component type tabs updates the live preview area
 - [ ] changing a prop in the sidebar updates the preview within 200ms
 - [ ] clicking "Copy Code" copies valid TypeScript React snippet to clipboard
-- [ ] generated code contains correct import path `@loopforge/react`
+- [ ] generated code contains correct import path `@viralo/react`
 - [ ] generated code includes all configured props in the JSX
 
 ### ReferralWidget.test.tsx
@@ -93,6 +93,6 @@
 (Reviewer verifies these against PRD.md Must Have features)
 - [ ] AC: Developer can configure any of 3 component types, see live preview update within 200ms of any prop change, and copy a working `<ReferralWidget />` or `<InviteGate />` snippet to clipboard
 - [ ] AC: Each component renders correctly in isolation, accepts documented props, and matches the live preview output exactly
-- [ ] AC: Generated code is syntactically valid TypeScript React, imports from `@loopforge/react`, and runs without modification when pasted into a Vite + React project
+- [ ] AC: Generated code is syntactically valid TypeScript React, imports from `@viralo/react`, and runs without modification when pasted into a Vite + React project
 - [ ] AC: Dashboard renders with realistic mock data, K-factor updates when user adjusts simulation parameters, attribution tree displays at least 3 levels of depth
 - [ ] AC: User can create, edit, and delete at least one rule; rule state persists to localStorage; rules render as readable JSON config output
