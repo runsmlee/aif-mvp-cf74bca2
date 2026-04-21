@@ -7,7 +7,12 @@ export default defineConfig({
   resolve: {
     conditions: ['import', 'module', 'browser', 'default'],
     dedupe: ['react', 'react-dom'],
-    modules: [path.resolve(__dirname, 'node_modules'), '/app/node_modules', 'node_modules'],
+    alias: {
+      'react': path.resolve(__dirname, 'node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
+      '@testing-library/jest-dom': path.resolve('/app/node_modules/@testing-library/jest-dom/dist/index.js'),
+      '@testing-library/react': path.resolve('/app/node_modules/@testing-library/react/dist/index.js'),
+    },
   },
   css: {
     postcss: {
