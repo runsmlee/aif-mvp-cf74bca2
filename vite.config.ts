@@ -8,6 +8,9 @@ export default defineConfig({
     conditions: ['import', 'module', 'browser', 'default'],
     dedupe: ['react', 'react-dom'],
     modules: [path.resolve(__dirname, 'node_modules'), '/app/node_modules', 'node_modules'],
+    alias: {
+      '@testing-library/jest-dom': '/app/node_modules/@testing-library/jest-dom',
+    },
   },
   css: {
     postcss: {
