@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/postcss';
 import path from 'path';
 
 export default defineConfig({
@@ -10,11 +11,12 @@ export default defineConfig({
     modules: [path.resolve(__dirname, 'node_modules'), '/app/node_modules', 'node_modules'],
     alias: {
       '@testing-library/jest-dom': '/app/node_modules/@testing-library/jest-dom',
+      '@testing-library/react': '/app/node_modules/@testing-library/react',
     },
   },
   css: {
     postcss: {
-      plugins: [],
+      plugins: [tailwindcss()],
     },
   },
   build: {
