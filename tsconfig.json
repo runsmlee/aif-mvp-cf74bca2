@@ -18,7 +18,9 @@
     "typeRoots": ["/app/node_modules/@types", "./node_modules/@types"],
     "paths": {
       "react": ["/app/node_modules/@types/react"],
-      "react-dom": ["/app/node_modules/@types/react-dom"]
+      "react/*": ["/app/node_modules/@types/react/*"],
+      "react-dom": ["/app/node_modules/@types/react-dom"],
+      "react-dom/*": ["/app/node_modules/@types/react-dom/*"]
     },
     "baseUrl": "."
   },
