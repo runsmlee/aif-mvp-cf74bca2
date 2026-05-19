@@ -14,13 +14,18 @@ vi.mock('../src/components/QuickstartGuide', () => ({
 }));
 
 describe('App', () => {
-  it('renders the app with header and playground tab active by default', () => {
+  it('renders the app with header containing brand name', () => {
     render(<App />);
-    // Header should contain the brand name
     const header = screen.getByRole('banner');
     expect(header).toBeInTheDocument();
     expect(header).toHaveTextContent(/Viralo/i);
-    expect(header).toHaveTextContent(/Growth as Code/i);
+  });
+
+  it('renders the playground as the default view with live preview', () => {
+    render(<App />);
+    // Playground should be visible immediately — no marketing hero
+    expect(screen.getByTestId('playground')).toBeInTheDocument();
+    expect(screen.getByTestId('live-preview')).toBeInTheDocument();
   });
 
   it('displays all navigation tabs', () => {
@@ -49,8 +54,10 @@ describe('App', () => {
     expect(await screen.findByTestId('quickstart-mock')).toBeInTheDocument();
   });
 
-  it('renders footer with brand text', () => {
+  it('renders an h1 with the product name', () => {
     render(<App />);
-    expect(screen.getByText(/Viralo — Growth as Code/i)).toBeInTheDocument();
+    const h1 = screen.getByRole('heading', { level: 1 });
+    expect(h1).toBeInTheDocument();
+    expect(h1).toHaveTextContent(/Viralo/i);
   });
 });
