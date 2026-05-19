@@ -1,23 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/postcss';
-import path from 'path';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     conditions: ['import', 'module', 'browser', 'default'],
     dedupe: ['react', 'react-dom'],
-    modules: [path.resolve(__dirname, 'node_modules'), '/app/node_modules', 'node_modules'],
-    alias: {
-      '@testing-library/jest-dom': '/app/node_modules/@testing-library/jest-dom',
-      '@testing-library/react': '/app/node_modules/@testing-library/react',
-    },
-  },
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
   },
   build: {
     target: 'es2020',

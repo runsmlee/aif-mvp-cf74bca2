@@ -181,10 +181,10 @@ export function QuickstartGuide() {
   return (
     <div className="space-y-5" data-testid="quickstart-guide">
       <div>
-        <h2 className="text-text-primary text-lg font-semibold tracking-tight">
+        <h2 className="text-text-primary text-2xl font-bold tracking-tight">
           Integration Quickstart
         </h2>
-        <p className="text-text-muted text-xs mt-0.5">
+        <p className="text-text-secondary text-sm mt-1">
           Get Viralo running in your project in under 2 minutes
         </p>
       </div>
@@ -221,10 +221,10 @@ export function QuickstartGuide() {
                   {step.step}
                 </span>
                 <div>
-                  <h3 className="text-text-primary text-sm font-semibold tracking-tight">
+                  <h3 className="text-text-primary text-base font-semibold tracking-tight">
                     {step.title}
                   </h3>
-                  <p className="text-text-muted text-xs mt-0.5">{step.description}</p>
+                  <p className="text-text-secondary text-sm mt-1">{step.description}</p>
                 </div>
               </div>
               <button
