@@ -25,9 +25,7 @@ export default function App() {
     <div className="h-screen flex flex-col bg-surface">
       {/* Minimal header — zero marketing copy */}
       <header className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-border bg-surface-light/80 backdrop-blur-xl" role="banner">
-        <h1 className="text-text-primary font-bold text-base tracking-tight">
-          <span className="text-primary">Vira</span>lo
-        </h1>
+        <h1 className="text-primary font-bold text-base tracking-tight">Viralo</h1>
         <nav className="flex gap-0.5 p-0.5 rounded-md bg-surface/50 border border-border-subtle" role="tablist" aria-label="Main navigation">
           {NAV_ITEMS.map((item) => (
             <button
