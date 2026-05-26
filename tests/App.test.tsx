@@ -1,17 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import App from '../src/App';
-
-// Mock lazy imports
-vi.mock('../src/components/Dashboard', () => ({
-  Dashboard: () => <div data-testid="dashboard-mock">Dashboard</div>,
-}));
-vi.mock('../src/components/RulesBuilder', () => ({
-  RulesBuilder: () => <div data-testid="rules-mock">Rules</div>,
-}));
-vi.mock('../src/components/QuickstartGuide', () => ({
-  QuickstartGuide: () => <div data-testid="quickstart-mock">Quickstart</div>,
-}));
 
 describe('App', () => {
   it('renders the app with header containing brand name', () => {
@@ -23,35 +12,9 @@ describe('App', () => {
 
   it('renders the playground as the default view with live preview', () => {
     render(<App />);
-    // Playground should be visible immediately — no marketing hero
+    // Playground should be visible immediately — no marketing hero, zero clicks
     expect(screen.getByTestId('playground')).toBeInTheDocument();
     expect(screen.getByTestId('live-preview')).toBeInTheDocument();
-  });
-
-  it('displays all navigation tabs', () => {
-    render(<App />);
-    expect(screen.getByRole('tab', { name: /playground/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /dashboard/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /rules/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /quickstart/i })).toBeInTheDocument();
-  });
-
-  it('switching to Dashboard tab renders dashboard content', async () => {
-    render(<App />);
-    fireEvent.click(screen.getByRole('tab', { name: /dashboard/i }));
-    expect(await screen.findByTestId('dashboard-mock')).toBeInTheDocument();
-  });
-
-  it('switching to Rules tab renders rules builder', async () => {
-    render(<App />);
-    fireEvent.click(screen.getByRole('tab', { name: /rules/i }));
-    expect(await screen.findByTestId('rules-mock')).toBeInTheDocument();
-  });
-
-  it('switching to Quickstart tab renders quickstart guide', async () => {
-    render(<App />);
-    fireEvent.click(screen.getByRole('tab', { name: /quickstart/i }));
-    expect(await screen.findByTestId('quickstart-mock')).toBeInTheDocument();
   });
 
   it('renders an h1 with the product name', () => {
@@ -59,5 +22,21 @@ describe('App', () => {
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1).toBeInTheDocument();
     expect(h1).toHaveTextContent(/Viralo/i);
+  });
+
+  it('renders the playground component type tabs (ReferralWidget, InviteGate, PoweredByBadge)', () => {
+    render(<App />);
+    // These are the playground's internal component tabs, not navigation tabs
+    expect(screen.getByRole('tab', { name: /referral/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /invite/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /badge/i })).toBeInTheDocument();
+  });
+
+  it('does not render navigation menu tabs (Dashboard, Rules Builder, Quickstart)', () => {
+    render(<App />);
+    // Root route must show playground directly — no navigation menu
+    expect(screen.queryByRole('tab', { name: /dashboard/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /rules/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /quickstart/i })).not.toBeInTheDocument();
   });
 });
