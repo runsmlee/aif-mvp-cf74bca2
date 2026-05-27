@@ -3,25 +3,32 @@ import { render, screen } from '@testing-library/react';
 import App from '../src/App';
 
 describe('App', () => {
-  it('renders the app with header containing brand name', () => {
-    render(<App />);
-    const header = screen.getByRole('banner');
-    expect(header).toBeInTheDocument();
-    expect(header).toHaveTextContent(/Viralo/i);
+  it('renders the playground as the first element in the DOM body', () => {
+    const { container } = render(<App />);
+    // The first child of the root should be <main> containing the playground
+    const root = container.firstElementChild;
+    expect(root?.tagName).toBe('MAIN');
+    expect(screen.getByTestId('playground')).toBeInTheDocument();
   });
 
-  it('renders the playground as the default view with live preview', () => {
+  it('does not render a navigation header above the playground', () => {
+    render(<App />);
+    // No standalone header/banner element should exist above the playground
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
+  });
+
+  it('renders the playground with live preview immediately', () => {
     render(<App />);
     // Playground should be visible immediately — no marketing hero, zero clicks
     expect(screen.getByTestId('playground')).toBeInTheDocument();
     expect(screen.getByTestId('live-preview')).toBeInTheDocument();
   });
 
-  it('renders an h1 with the product name', () => {
+  it('renders an h1 with SEO text inside the playground layout', () => {
     render(<App />);
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1).toBeInTheDocument();
-    expect(h1).toHaveTextContent(/Viralo/i);
+    expect(h1).toHaveTextContent('Referral Widget React Component');
   });
 
   it('renders the playground component type tabs (ReferralWidget, InviteGate, PoweredByBadge)', () => {

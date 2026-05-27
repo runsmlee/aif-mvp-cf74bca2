@@ -315,8 +315,9 @@ export function Playground() {
 
   return (
     <div className="flex flex-col h-full" data-testid="playground">
-      {/* Component type tabs */}
+      {/* Component type tabs with integrated h1 for SEO */}
       <div className="shrink-0 flex items-center gap-0 border-b border-border bg-surface-light/50 px-4" role="tablist" aria-label="Component type">
+        <h1 className="text-sm font-semibold text-text-primary tracking-tight mr-3 whitespace-nowrap select-none">Referral Widget React Component</h1>
         {TABS.map((tab) => (
           <button
             key={tab.key}
