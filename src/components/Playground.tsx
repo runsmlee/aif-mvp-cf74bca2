@@ -315,27 +315,10 @@ export function Playground() {
 
   return (
     <div className="flex flex-col h-full" data-testid="playground">
-      {/* Component type tabs with integrated h1 for SEO */}
-      <div className="shrink-0 flex items-center gap-0 border-b border-border bg-surface-light/50 px-4" role="tablist" aria-label="Component type">
-        <h1 className="text-sm font-semibold text-text-primary tracking-tight mr-3 whitespace-nowrap select-none">Referral Widget React Component</h1>
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            role="tab"
-            aria-selected={activeType === tab.key}
-            onClick={() => handleTabChange(tab.key)}
-            className={`px-4 py-2.5 text-sm font-medium transition-all duration-200 border-b-2 -mb-px min-h-[40px] ${
-              activeType === tab.key
-                ? 'text-primary border-primary'
-                : 'text-text-secondary border-transparent hover:text-text-primary hover:border-border-hover'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      {/* SEO h1 — visually hidden, accessible to crawlers */}
+      <h1 className="sr-only">Referral Widget React Component</h1>
 
-      {/* Split pane: left = preview, right = code */}
+      {/* Split pane: left = preview, right = code editor with file-style tabs */}
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
         {/* Left pane: live preview + config */}
         <div className="flex-1 flex flex-col min-h-0 min-w-0 border-r border-border">
@@ -373,8 +356,27 @@ export function Playground() {
           </div>
         </div>
 
-        {/* Right pane: code */}
+        {/* Right pane: file-style tabs + code editor */}
         <div className="flex-1 flex flex-col min-h-0 min-w-0 lg:max-w-[50%]">
+          {/* File-style tab bar (VS Code style) — component selector lives here */}
+          <div className="shrink-0 flex items-center gap-0 border-b border-border bg-surface-light/50" role="tablist" aria-label="Component type">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                role="tab"
+                aria-selected={activeType === tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                className={`px-4 py-2 text-xs font-mono font-medium transition-all duration-200 border-b-2 -mb-px min-h-[36px] ${
+                  activeType === tab.key
+                    ? 'text-primary border-primary bg-surface/80'
+                    : 'text-text-secondary border-transparent hover:text-text-primary hover:bg-surface/40'
+                }`}
+              >
+                {tab.label}.tsx
+              </button>
+            ))}
+          </div>
+
           <div className="flex-1 min-h-0 overflow-auto p-4">
             <CodeSnippet code={code} />
           </div>
