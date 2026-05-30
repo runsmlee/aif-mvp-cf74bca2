@@ -57,6 +57,12 @@
               <h3 style="font-size:13px;font-weight:500;margin:0 0 12px 0;color:#64748b;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:0.05em">tsx</h3>
               <pre style="font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.7;color:#e2e8f0;background:transparent;margin:0;white-space:pre-wrap;word-break:break-word"><code>import { ReferralWidget } from '@viralo/react';
 
+interface ReferralWidgetProps {
+  referralCode: string;
+  referralLink?: string;
+  primaryColor?: string;
+}
+
 export function App() {
   return (
     &lt;ReferralWidget
