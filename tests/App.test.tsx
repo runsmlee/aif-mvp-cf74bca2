@@ -28,7 +28,7 @@ describe('App', () => {
     render(<App />);
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1).toBeInTheDocument();
-    expect(h1).toHaveTextContent('Referral Widget React Component');
+    expect(h1).toHaveTextContent('Viralo — Viral Loop Calculator');
   });
 
   it('renders the playground component type tabs (ReferralWidget, InviteGate, PoweredByBadge)', () => {

@@ -316,7 +316,7 @@ export function Playground() {
   return (
     <div className="flex flex-col h-full" data-testid="playground">
       {/* SEO h1 — visually hidden, accessible to crawlers */}
-      <h1 className="sr-only">Referral Widget React Component</h1>
+      <h1 className="sr-only">Viralo — Viral Loop Calculator</h1>
 
       {/* Split pane: left = preview, right = code editor with file-style tabs */}
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
