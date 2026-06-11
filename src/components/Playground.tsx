@@ -315,13 +315,23 @@ export function Playground() {
 
   return (
     <div className="flex flex-col h-full" data-testid="playground">
-      {/* SEO h1 — visually hidden, accessible to crawlers */}
-      <h1 className="sr-only">Viralo — Viral Loop Calculator</h1>
+      {/* SEO h1 — keyword-targeted for search queries */}
+      <h1 className="sr-only">
+        K-Factor Calculator
+        <span className="sr-only"> — Viralo</span>
+      </h1>
 
       {/* Split pane: left = preview, right = code editor with file-style tabs */}
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
         {/* Left pane: live preview + config */}
         <div className="flex-1 flex flex-col min-h-0 min-w-0 border-r border-border">
+          <h2 className="sr-only">
+            {activeType === 'referral'
+              ? 'React Referral Widget Code'
+              : activeType === 'invite'
+                ? 'React Invite Gate Code'
+                : 'React Powered By Badge Code'}
+          </h2>
           <div
             className="flex-1 flex items-center justify-center p-6 relative overflow-auto"
             data-testid="live-preview"

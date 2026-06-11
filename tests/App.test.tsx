@@ -28,7 +28,14 @@ describe('App', () => {
     render(<App />);
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1).toBeInTheDocument();
-    expect(h1).toHaveTextContent('Viralo — Viral Loop Calculator');
+    expect(h1).toHaveTextContent('K-Factor Calculator');
+  });
+
+  it('renders an h2 with component section heading for heading hierarchy', () => {
+    render(<App />);
+    const h2 = screen.getByRole('heading', { level: 2 });
+    expect(h2).toBeInTheDocument();
+    expect(h2).toHaveTextContent('React Referral Widget Code');
   });
 
   it('renders the playground component type tabs (ReferralWidget, InviteGate, PoweredByBadge)', () => {
