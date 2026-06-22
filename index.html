@@ -28,11 +28,28 @@
         <!-- K-factor formula section: indexable by search engines for "K-factor formula" and "viral coefficient" queries -->
         <section aria-label="K-factor formula" style="padding:16px 24px">
           <h2 style="font-size:18px;font-weight:600;margin:0 0 8px 0;color:#e2e8f0">K-Factor Formula</h2>
-          <p style="font-size:15px;color:#CBD5E1;margin:0 0 8px 0;line-height:1.6">
-            <strong style="color:#e2e8f0">K-factor (viral coefficient) formula:</strong>
-            <code style="display:block;margin:8px 0;padding:10px 14px;background:#111827;border:1px solid #1e293b;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:14px;color:#EF4444">K = invites per user × invite-to-signup conversion rate</code>
-            A K-factor greater than 1 means each user brings in more than one new user, creating self-sustaining viral growth.
-          </p>
+          <div style="font-size:15px;color:#CBD5E1;line-height:1.7">
+            <p style="margin:0 0 12px 0">
+              The K-factor (viral coefficient) formula is:
+              <strong style="color:#e2e8f0"> K = invites per user × invite-to-signup conversion rate</strong>.
+              Each variable captures a distinct part of your referral loop.
+            </p>
+            <p style="margin:0 0 12px 0">
+              <strong style="color:#e2e8f0">Invites per user</strong> measures how many people your average user actively invites to your product. For example, if you run a SaaS dashboard and each user can share a referral link, the average number of links shared per user across a 30-day window is your invites per user metric. A consumer social app might see 5 to 10 invites per user, while a B2B tool typically sees 0.5 to 2. Track this by instrumenting share button clicks or referral link generations in your analytics platform such as Amplitude, Mixpanel, or PostHog. Count unique share events per user and divide by total active users in the period.
+            </p>
+            <p style="margin:0 0 12px 0">
+              <strong style="color:#e2e8f0">Invite-to-signup conversion rate</strong> is the percentage of invited prospects who actually create an account. If Sarah sends 10 invites and 3 of those recipients sign up, her conversion rate is 30%. To measure this at the product level, divide total new signups attributed to referrals by total invites sent in the same period. You need a referral attribution mechanism — typically a unique code or tracked link stored in a cookie or URL parameter — to connect each signup back to the inviter.
+            </p>
+            <p style="margin:0 0 12px 0">
+              <strong style="color:#e2e8f0">K-factor benchmarks:</strong> A K-factor below 1 (for example, K = 0.5) means each user brings in half a new user on average. Your growth still depends primarily on paid or organic acquisition channels. Most products operate here, and that is normal. A K-factor of 1.0 means each user replaces themselves with exactly one new user — your user base grows linearly from the initial cohort without additional acquisition spend. This is the inflection point where viral mechanics start carrying meaningful weight. A K-factor above 1 (for example, K = 1.5) means each user brings in 1.5 new users, who each bring in 1.5 more, creating exponential viral growth. This is rare and typically seen in consumer social products like WhatsApp or Instagram in their early days.
+            </p>
+            <p style="margin:0 0 12px 0">
+              <strong style="color:#e2e8f0">Worked example:</strong> Suppose your analytics show that the average user sends 4 referral invites, and 25% of invited users sign up. Your K-factor is 4 × 0.25 = <strong style="color:#e2e8f0">1.0</strong>. If you improve the referral email copy and conversion rises to 35%, your K-factor becomes 4 × 0.35 = <strong style="color:#e2e8f0">1.4</strong> — now in viral growth territory. Conversely, if invites per user drops to 2 because users only share once, K falls to 2 × 0.25 = <strong style="color:#e2e8f0">0.5</strong>, and viral acquisition alone cannot sustain growth.
+            </p>
+            <p style="margin:0 0 12px 0">
+              <strong style="color:#e2e8f0">Common pitfalls in K-factor calculation:</strong> Counting bots or duplicate accounts as signups inflates conversion rate — always verify signups with email confirmation or captcha. Measuring invites sent versus invites received can mislead you because some users send invites to the same person multiple times; track unique recipient emails instead of total send events. Ignoring time decay is another trap: a K-factor measured over 7 days tells a different story than one measured over 90 days, so define and report your measurement window consistently. Confusing activation with signup overstates viral performance — a user who creates an account but never returns does not contribute to long-term growth, so consider measuring K-factor against activated users. Finally, cherry-picking cohorts by measuring only your most engaged power users will overstate results. Always compute K-factor across your entire active user base for an honest picture.
+            </p>
+          </div>
         </section>
         <main style="flex:1;display:flex;flex-direction:row;min-height:100vh">
           <section style="flex:1;padding:24px;border-right:1px solid #1e293b" aria-label="Live preview of ReferralWidget component">

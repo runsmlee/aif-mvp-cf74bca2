@@ -7,6 +7,39 @@ describe('Playground', () => {
     render(<Playground />);
   });
 
+  it('renders the interactive K-factor calculator with inputs and result', () => {
+    render(<Playground />);
+    const invitesInput = screen.getByLabelText(/invites per user/i);
+    const conversionInput = screen.getByLabelText(/conversion rate/i);
+    expect(invitesInput).toBeInTheDocument();
+    expect(conversionInput).toBeInTheDocument();
+    // K-factor result should be displayed
+    const result = screen.getByLabelText(/k-factor value/i);
+    expect(result).toBeInTheDocument();
+  });
+
+  it('computes K-factor correctly from inputs', () => {
+    render(<Playground />);
+    const invitesInput = screen.getByLabelText(/invites per user/i);
+    const conversionInput = screen.getByLabelText(/conversion rate/i);
+    // Set invites = 4, conversion = 25% => K = 1.00
+    fireEvent.change(invitesInput, { target: { value: '4' } });
+    fireEvent.change(conversionInput, { target: { value: '25' } });
+    const result = screen.getByLabelText(/k-factor value/i);
+    expect(result).toHaveTextContent('1.00');
+  });
+
+  it('updates K-factor when inputs change', () => {
+    render(<Playground />);
+    const invitesInput = screen.getByLabelText(/invites per user/i);
+    const conversionInput = screen.getByLabelText(/conversion rate/i);
+    // Set invites = 5, conversion = 40% => K = 2.00
+    fireEvent.change(invitesInput, { target: { value: '5' } });
+    fireEvent.change(conversionInput, { target: { value: '40' } });
+    const result = screen.getByLabelText(/k-factor value/i);
+    expect(result).toHaveTextContent('2.00');
+  });
+
   it('displays all three component type tabs: ReferralWidget, InviteGate, PoweredByBadge', () => {
     render(<Playground />);
     expect(screen.getByRole('tab', { name: /referral/i })).toBeInTheDocument();

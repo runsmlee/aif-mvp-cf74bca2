@@ -33,9 +33,20 @@ describe('App', () => {
 
   it('renders an h2 with component section heading for heading hierarchy', () => {
     render(<App />);
-    const h2 = screen.getByRole('heading', { level: 2 });
-    expect(h2).toBeInTheDocument();
-    expect(h2).toHaveTextContent('React Referral Widget Code');
+    const h2s = screen.getAllByRole('heading', { level: 2 });
+    expect(h2s.length).toBeGreaterThanOrEqual(1);
+    expect(h2s.some(h => h.textContent?.includes('React Referral Widget Code'))).toBe(true);
+  });
+
+  it('renders the interactive K-factor calculator', () => {
+    render(<App />);
+    expect(screen.getByTestId('kfactor-calculator')).toBeInTheDocument();
+  });
+
+  it('renders K-factor formula educational content section', () => {
+    render(<App />);
+    const formulaHeading = screen.getByRole('heading', { level: 2, name: /k-factor formula/i });
+    expect(formulaHeading).toBeInTheDocument();
   });
 
   it('renders the playground component type tabs (ReferralWidget, InviteGate, PoweredByBadge)', () => {
